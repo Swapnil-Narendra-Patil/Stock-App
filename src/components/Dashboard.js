@@ -1,10 +1,9 @@
-// src/components/Dashboard.js
-
+// Dashboard.tsx
 import React, { useEffect, useState } from 'react';
 import Card from "./Card";
 import FinancialTable from './FinancialTable';
 import { fetchFinancialData } from '../services/api.tsx';
-import CandlestickChart from './CandlestickChart.tsx'; // Updated import
+import CandlestickChart from './CandlestickChart.tsx';
 import { dummyData } from '../data/dummyData.tsx';
 
 const Dashboard = () => {
@@ -26,7 +25,7 @@ const Dashboard = () => {
       <div className="col-span-1 md:col-span-2 xl:col-span-3 row-span-1">
         <Card>Header</Card>
       </div>
-      <div className="md:col-span-2 row-span-4">
+      <div className="md:col-span-2 row-span-4 overflow-hidden">
         <Card>
           <CandlestickChart data={dummyData} />
         </Card>
