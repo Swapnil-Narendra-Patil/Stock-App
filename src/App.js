@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
 
-function App() {
+import React, { useEffect, useState } from 'react';
+import { dummyData } from './data/dummyData.tsx';
+import fetchFinancialData from './services/api.tsx';
+import Dashboard from './components/Dashboard.js';
+import Candlestick from './components/CandlestickChart.tsx';
+
+const App = () => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const result = await fetchFinancialData();
+      setData(result);
+    };
+
+    getData();
+  }, []);
+
+  if (!data) return <div>Loading...</div>;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Dashboard />
+      <div className="App p-6">
+        <h1 className="text-3xl font-bold mb-6">Apple Stock Overview</h1>
+        <Candlestick data={dummyData} />
+        {/* Uncomment this line if you want to use FinancialTable component */}
+        {/* <FinancialTable data={data} /> */}
+      </div>
+    </>
   );
-}
+};
 
 export default App;
