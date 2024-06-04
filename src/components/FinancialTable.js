@@ -14,13 +14,25 @@ const FinancialTable = ({ data }) => {
     shares_outstanding,
   } = data;
 
+  // Additional analysts and their estimates
+  const additional_analysts = {
+    'BofA': 8.1,
+    'Citibank': 7.0,
+    'Moelis': 6.3,
+    'Lazard': 7.5,
+    'Evercore': 8.7
+  };
+
+  // Merge the analyst estimates
+  const merged_analyst_estimates = { ...analyst_estimates, ...additional_analysts };
+
   return (
-    <div className="p-2 overflow-auto"> {/* Adjust padding here */}
-      <h2 className="text-lg font-bold mb-2">Key Ratios</h2> {/* Adjust text size and margin here */}
+    <div className="p-2 overflow-auto">
+      <h2 className="text-lg font-bold mb-2">Key Ratios</h2>
       <table className="w-full bg-white border border-gray-200">
         <thead>
           <tr>
-            <th className="px-1 py-1 border-b">Ratio</th> {/* Adjust padding here */}
+            <th className="px-1 py-1 border-b">Ratio</th>
             <th className="px-1 py-1 border-b">Value</th>
           </tr>
         </thead>
@@ -73,7 +85,7 @@ const FinancialTable = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(analyst_estimates).map(([key, value], index) => (
+          {Object.entries(merged_analyst_estimates).map(([key, value], index) => (
             <tr key={key} className={index % 2 === 0 ? "bg-gray-50" : ""}>
               <td className="px-1 py-1 border-b">{key}</td>
               <td className="px-1 py-1 border-b">{value}</td>
