@@ -1,152 +1,209 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  ResponsiveContainer,
-  ComposedChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Chart as ChartJS,
+  registerables,
+  TimeScale,
   Tooltip,
-  Bar,
-} from 'recharts';
+  Legend,
+  LinearScale,
+  CategoryScale,
+  ChartData,
+  ChartOptions,
+} from 'chart.js';
+import 'chartjs-adapter-date-fns';
+import {
+  CandlestickController,
+  CandlestickElement,
+} from 'chartjs-chart-financial';
+import { Chart } from 'react-chartjs-2';
+import { StockData } from '../data/dummyData';
+import { IntradayStockData } from '../data/dummyIntradayData';
 import { format } from 'date-fns';
 
-interface StockData {
-  date: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
+ChartJS.register(
+  ...registerables,
+  TimeScale,
+  CandlestickController,
+  CandlestickElement,
+  Tooltip,
+  Legend,
+  LinearScale,
+  CategoryScale
+);
+
+interface CandlestickChartProps {
+  dailyData: StockData[];
+  intradayData: IntradayStockData[];
 }
 
-interface CandlestickProps {
-  data: StockData[];
-}
+const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intradayData }) => {
+  const [filteredData, setFilteredData] = useState<StockData[] | IntradayStockData[]>([]);
+  const [filter, setFilter] = useState('1Y'); // Default filter to 1 Year
 
-const CandlestickChart: React.FC<CandlestickProps> = ({ data }) => {
-  const [range, setRange] = useState('6M');
+  useEffect(() => {
+    filterData(filter);
+  }, [filter, dailyData, intradayData]);
 
-  const filterData = () => {
+  const filterData = (interval: string) => {
     const now = new Date();
-    let filteredData = data;
-    switch (range) {
+    let filtered: StockData[] | IntradayStockData[] = [];
+    switch (interval) {
       case '1D':
-        filteredData = data.slice(-1);
+        if (intradayData && intradayData.length > 0) {
+          filtered = intradayData;
+        } else {
+          console.error('No intraday data available');
+        }
         break;
       case '1W':
-        filteredData = data.slice(-7);
+        filtered = dailyData.slice(-7); // Filter last 7 days
         break;
       case '1M':
-        filteredData = data.slice(-30);
+        filtered = dailyData.slice(-30); // Filter last 30 days
         break;
       case '3M':
-        filteredData = data.slice(-90);
+        filtered = dailyData.slice(-90); // Filter last 90 days
         break;
-      case '6M':
-        filteredData = data.slice(-180);
+      case '5M':
+        filtered = dailyData.slice(-150); // Filter last 150 days
         break;
       case 'YTD':
-        filteredData = data.filter(item => new Date(item.date).getFullYear() === now.getFullYear());
+        filtered = dailyData.filter(item => new Date(item.date).getFullYear() === now.getFullYear());
         break;
       case '1Y':
-        filteredData = data.slice(-365);
+        filtered = dailyData.slice(-365); // Filter last 365 days
         break;
       default:
-        break;
+        filtered = dailyData;
     }
-    return filteredData;
+    console.log(`Filtered Data for ${interval}:`, filtered);
+    setFilteredData(filtered);
   };
 
-  const filteredData = filterData();
+  const chartData: ChartData<'candlestick'> = {
+    datasets: [
+      {
+        label: 'Stock Price',
+        data: filteredData.map(item => ({
+          x: 'time' in item ? new Date(`${item.date}T${item.time}`).getTime() : new Date(item.date).getTime(),
+          o: item.open,
+          h: item.high,
+          l: item.low,
+          c: item.close,
+        })),
+        borderColor: (context) => {
+          const { dataset, dataIndex } = context;
+          const value = dataset.data[dataIndex] as any;
+          return value?.c > value?.o ? '#00ff00' : '#ff0000';
+        },
+        backgroundColor: (context) => {
+          const { dataset, dataIndex } = context;
+          const value = dataset.data[dataIndex] as any;
+          return value?.c > value?.o ? '#00ff00' : '#ff0000';
+        },
+      },
+    ],
+  };
+
+  const chartOptions: ChartOptions<'candlestick'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          unit: filter === '1D' ? 'minute' : 'day',
+          unitStepSize: filter === '1D' ? 5 : undefined, // Use unitStepSize for step size
+          tooltipFormat: filter === '1D' ? 'MMM d, yyyy HH:mm' : 'MMM d, yyyy',
+          displayFormats: {
+            minute: 'HH:mm',
+            day: 'MMM d',
+          },
+        },
+        grid: {
+          color: '#EDEDED',
+        },
+        ticks: {
+          autoSkip: true,
+          maxTicksLimit: 10,
+        },
+      },
+      y: {
+        beginAtZero: false,
+        grid: {
+          color: '#EDEDED',
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const dataPoint = context.raw as any;
+            const date = format(new Date(dataPoint.x), filter === '1D' ? 'MMM d, yyyy HH:mm' : 'MMM d, yyyy');
+            return `Date: ${date}\nOpen: ${dataPoint.o}\nHigh: ${dataPoint.h}\nLow: ${dataPoint.l}\nClose: ${dataPoint.c}`;
+          },
+        },
+      },
+    },
+  };
 
   return (
     <div>
-      <div className="flex justify-around mb-4">
-        {['1D', '1W', '1M', '3M', '6M', 'YTD', '1Y'].map(r => (
-          <button
-            key={r}
-            onClick={() => setRange(r)}
-            className={`px-4 py-2 ${range === r ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          >
-            {r}
-          </button>
-        ))}
-      </div>
-      <ResponsiveContainer width="100%" height={400}>
-        <ComposedChart
-          data={filteredData}
-          margin={{ top: 20, right: 20, left: 20, bottom: 50 }}
+      <div className="mb-4 flex space-x-2">
+        <button
+          onClick={() => setFilter('1D')}
+          className={`px-2 py-1 rounded ${filter === '1D' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
         >
-          <CartesianGrid stroke="#f5f5f5" />
-          <XAxis
-            dataKey="date"
-            tickFormatter={(date) => format(new Date(date), 'MM/dd')}
-            minTickGap={20}
-            type="category"
-            scale="band"
-          />
-          <YAxis domain={['auto', (dataMin) => dataMin - 10]} />
-          <Tooltip
-            labelFormatter={(label) => format(new Date(label), 'MMMM dd, yyyy')}
-          />
-          <Bar
-            dataKey="low"
-            fill="transparent"
-            stroke="black"
-            shape={(props) => {
-              const { x, y, width, height, payload } = props;
-              const barHeight = Math.abs(payload.open - payload.close);
-              const yOpen = payload.open > payload.close ? y : y + height - barHeight;
-              const color = payload.close > payload.open ? 'green' : 'red';
-              const wickLength = 5; // Length of the wick in pixels
-
-              return (
-                <g>
-                  {/* High line */}
-                  <line
-                    x1={x + width / 2}
-                    x2={x + width / 2}
-                    y1={Math.min(y, yOpen) - wickLength}
-                    y2={Math.min(y, yOpen)}
-                    stroke="black"
-                  />
-                  {/* Low line */}
-                  <line
-                    x1={x + width / 2}
-                    x2={x + width / 2}
-                    y1={Math.max(y, yOpen) + barHeight}
-                    y2={Math.max(y, yOpen) + barHeight + wickLength}
-                    stroke="black"
-                  />
-                  {/* Candlestick body */}
-                  <rect
-                    x={x}
-                    y={Math.min(y, yOpen)}
-                    width={width}
-                    height={barHeight}
-                    fill={color}
-                  />
-                  {/* Top wick */}
-                  <line
-                    x1={x + width / 2}
-                    x2={x + width / 2}
-                    y1={Math.min(y, yOpen)}
-                    y2={Math.min(y, yOpen) - wickLength}
-                    stroke={color}
-                  />
-                  {/* Bottom wick */}
-                  <line
-                    x1={x + width / 2}
-                    x2={x + width / 2}
-                    y1={Math.max(y, yOpen) + barHeight}
-                    y2={Math.max(y, yOpen) + barHeight + wickLength}
-                    stroke={color}
-                  />
-                </g>
-              );
-            }}
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
+          1 Day
+        </button>
+        <button
+          onClick={() => setFilter('1W')}
+          className={`px-2 py-1 rounded ${filter === '1W' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+        >
+          1 Week
+        </button>
+        <button
+          onClick={() => setFilter('1M')}
+          className={`px-2 py-1 rounded ${filter === '1M' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+        >
+          1 Month
+        </button>
+        <button
+          onClick={() => setFilter('3M')}
+          className={`px-2 py-1 rounded ${filter === '3M' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+        >
+          3 Months
+        </button>
+        <button
+          onClick={() => setFilter('5M')}
+          className={`px-2 py-1 rounded ${filter === '5M' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+        >
+          5 Months
+        </button>
+        <button
+          onClick={() => setFilter('YTD')}
+          className={`px-2 py-1 rounded ${filter === 'YTD' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+        >
+          YTD
+        </button>
+        <button
+          onClick={() => setFilter('1Y')}
+          className={`px-2 py-1 rounded ${filter === '1Y' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+        >
+          1 Year
+        </button>
+      </div>
+      <div style={{ height: '500px', width: '100%' }}>
+        {filteredData.length > 0 ? (
+          <Chart type="candlestick" data={chartData} options={chartOptions} />
+        ) : (
+          <div>No data available</div>
+        )}
+      </div>
     </div>
   );
 };

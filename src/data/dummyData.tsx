@@ -1,4 +1,4 @@
-// src/data/dummyData.ts
+import { format } from 'date-fns';
 
 export interface StockData {
   date: string;
@@ -6,20 +6,37 @@ export interface StockData {
   high: number;
   low: number;
   close: number;
+  volume: number;
 }
 
 export const generateDummyData = (numPoints: number): StockData[] => {
   const data: StockData[] = [];
   let date = new Date();
+  
+  let open = 150;
+  let close = open;
+
   for (let i = 0; i < numPoints; i++) {
-    const open = Math.random() * 100 + 190; // Ensure open is at least 190
-    const high = open + Math.random() * 50;
-    const low = Math.max(open - Math.random() * 50, 190); // Ensure low is at least 190
-    const close = low + Math.random() * (high - low);
-    data.push({ date: date.toISOString().split('T')[0], open, high, low, close });
-    date.setDate(date.getDate() - 1); // Decrement date for historical data
+    const change = (Math.random() - 0.5) * 5;
+    open = close;
+    close = open + change;
+    const high = Math.max(open, close) + (Math.random() * 2);
+    const low = Math.min(open, close) - (Math.random() * 2);
+    const volume = Math.floor(Math.random() * 20000000) + 5000000;
+
+    data.push({ 
+      date: format(date, 'yyyy-MM-dd'), 
+      open: parseFloat(open.toFixed(2)), 
+      high: parseFloat(high.toFixed(2)), 
+      low: parseFloat(low.toFixed(2)), 
+      close: parseFloat(close.toFixed(2)), 
+      volume 
+    });
+
+    date.setDate(date.getDate() - 1);
   }
-  return data;
+
+  return data.reverse();
 };
 
-export const dummyData: StockData[] = generateDummyData(365); // Generate 365 points of dummy data (1 year)
+export const dummyData: StockData[] = generateDummyData(365);

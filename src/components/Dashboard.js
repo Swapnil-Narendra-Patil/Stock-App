@@ -1,10 +1,10 @@
-// Dashboard.tsx
 import React, { useEffect, useState } from 'react';
 import Card from "./Card";
 import FinancialTable from './FinancialTable';
 import { fetchFinancialData } from '../services/api.tsx';
 import CandlestickChart from './CandlestickChart.tsx';
 import { dummyData } from '../data/dummyData.tsx';
+import { dummyIntradayData } from '../data/dummyIntradayData.tsx';
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -25,18 +25,18 @@ const Dashboard = () => {
       <div className="col-span-1 md:col-span-2 xl:col-span-3 row-span-1">
         <Card>Header</Card>
       </div>
-      <div className="md:col-span-2 row-span-4 overflow-hidden">
+      <div className="md:col-span-2 xl:col-span-2 row-span-4 overflow-hidden">
         <Card>
-          <CandlestickChart data={dummyData} />
+          <CandlestickChart dailyData={dummyData} intradayData={dummyIntradayData} />
         </Card>
       </div>
-      <div>
-        <Card>Overview</Card>
-      </div>
-      <div className="row-span-2 xl:row-span-3 overflow-auto">
+      <div className="md:col-span-1 xl:col-span-1 row-span-4 overflow-hidden">
         <Card>
           <FinancialTable data={data} />
         </Card>
+      </div>
+      <div className="md:col-span-1 xl:col-span-3 row-span-1">
+        <Card>Overview</Card>
       </div>
     </div>
   );

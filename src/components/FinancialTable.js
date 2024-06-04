@@ -1,8 +1,12 @@
 import React from 'react';
 
 const FinancialTable = ({ data }) => {
+  if (!data) {
+    return <div>No data available</div>;
+  }
+
   const {
-    analyst_estimates,
+    analyst_estimates = {},
     current_ratio,
     debt_to_equity_ratio,
     eps,
@@ -27,39 +31,39 @@ const FinancialTable = ({ data }) => {
         <tbody>
           <tr>
             <td className="px-4 py-2 border-b">Market Cap</td>
-            <td className="px-4 py-2 border-b">{market_ap}</td>
+            <td className="px-4 py-2 border-b">{market_ap ?? 'N/A'}</td>
           </tr>
           <tr className="bg-gray-50">
             <td className="px-4 py-2 border-b">Shares Outstanding</td>
-            <td className="px-4 py-2 border-b">{shares_outstanding}</td>
+            <td className="px-4 py-2 border-b">{shares_outstanding ?? 'N/A'}</td>
           </tr>
           <tr>
             <td className="px-4 py-2 border-b">P/E Ratio</td>
-            <td className="px-4 py-2 border-b">{pe_ratio}</td>
+            <td className="px-4 py-2 border-b">{pe_ratio ?? 'N/A'}</td>
           </tr>
           <tr className="bg-gray-50">
             <td className="px-4 py-2 border-b">P/S Ratio</td>
-            <td className="px-4 py-2 border-b">{ps_ratio}</td>
+            <td className="px-4 py-2 border-b">{ps_ratio ?? 'N/A'}</td>
           </tr>
           <tr>
             <td className="px-4 py-2 border-b">P/B Ratio</td>
-            <td className="px-4 py-2 border-b">{pb_ratio}</td>
+            <td className="px-4 py-2 border-b">{pb_ratio ?? 'N/A'}</td>
           </tr>
           <tr className="bg-gray-50">
             <td className="px-4 py-2 border-b">PEG Ratio</td>
-            <td className="px-4 py-2 border-b">{peg_ratio}</td>
+            <td className="px-4 py-2 border-b">{peg_ratio ?? 'N/A'}</td>
           </tr>
           <tr>
             <td className="px-4 py-2 border-b">Current Ratio</td>
-            <td className="px-4 py-2 border-b">{current_ratio}</td>
+            <td className="px-4 py-2 border-b">{current_ratio ?? 'N/A'}</td>
           </tr>
           <tr className="bg-gray-50">
             <td className="px-4 py-2 border-b">Debt to Equity Ratio</td>
-            <td className="px-4 py-2 border-b">{debt_to_equity_ratio}</td>
+            <td className="px-4 py-2 border-b">{debt_to_equity_ratio ?? 'N/A'}</td>
           </tr>
           <tr>
             <td className="px-4 py-2 border-b">EPS</td>
-            <td className="px-4 py-2 border-b">{eps}</td>
+            <td className="px-4 py-2 border-b">{eps ?? 'N/A'}</td>
           </tr>
         </tbody>
       </table>
@@ -73,12 +77,18 @@ const FinancialTable = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(analyst_estimates).map(([key, value], index) => (
-            <tr key={key} className={index % 2 === 0 ? "bg-gray-50" : ""}>
-              <td className="px-4 py-2 border-b">{key}</td>
-              <td className="px-4 py-2 border-b">{value}</td>
+          {Object.entries(analyst_estimates).length === 0 ? (
+            <tr>
+              <td className="px-4 py-2 border-b" colSpan="2">No estimates available</td>
             </tr>
-          ))}
+          ) : (
+            Object.entries(analyst_estimates).map(([key, value], index) => (
+              <tr key={key} className={index % 2 === 0 ? "bg-gray-50" : ""}>
+                <td className="px-4 py-2 border-b">{key}</td>
+                <td className="px-4 py-2 border-b">{value}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

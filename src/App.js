@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { dummyData } from './data/dummyData.tsx';
-import fetchFinancialData from './services/api.tsx';
+import { fetchFinancialData } from './services/api.tsx';
 import Dashboard from './components/Dashboard.js';
 import Candlestick from './components/CandlestickChart.tsx';
 
@@ -23,12 +23,12 @@ const App = () => {
   return (
     <>
       <Dashboard />
-      <div className="App p-6">
-        <h1 className="text-3xl font-bold mb-6">Apple Stock Overview</h1>
-        <Candlestick data={dummyData} />
+      {/* <div className="App p-6"> */}
+        {/* <h1 className="text-3xl font-bold mb-6">Apple Stock Overview</h1> */}
+        {/* <Candlestick data={dummyData} /> */}
         {/* Uncomment this line if you want to use FinancialTable component */}
         {/* <FinancialTable data={data} /> */}
-      </div>
+      {/* </div> */}
     </>
   );
 };
