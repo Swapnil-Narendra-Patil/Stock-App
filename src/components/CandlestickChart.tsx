@@ -38,22 +38,17 @@ interface CandlestickChartProps {
 
 const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intradayData }) => {
   const [filteredData, setFilteredData] = useState<StockData[] | IntradayStockData[]>([]);
-  const [filter, setFilter] = useState('1Y'); // Default filter to 1 Year
+  const [filter, setFilter] = useState('1D'); // Default filter to 1 Day
 
   useEffect(() => {
     filterData(filter);
   }, [filter, dailyData, intradayData]);
 
   const filterData = (interval: string) => {
-    const now = new Date();
     let filtered: StockData[] | IntradayStockData[] = [];
     switch (interval) {
       case '1D':
-        if (intradayData && intradayData.length > 0) {
-          filtered = intradayData;
-        } else {
-          console.error('No intraday data available');
-        }
+        filtered = intradayData;
         break;
       case '1W':
         filtered = dailyData.slice(-7); // Filter last 7 days
@@ -68,7 +63,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
         filtered = dailyData.slice(-150); // Filter last 150 days
         break;
       case 'YTD':
-        filtered = dailyData.filter(item => new Date(item.date).getFullYear() === now.getFullYear());
+        filtered = dailyData.filter(item => new Date(item.date).getFullYear() === new Date().getFullYear());
         break;
       case '1Y':
         filtered = dailyData.slice(-365); // Filter last 365 days
@@ -78,6 +73,10 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
     }
     console.log(`Filtered Data for ${interval}:`, filtered);
     setFilteredData(filtered);
+  };
+
+  const getTimeUnit = (filter: string) => {
+    return filter === '1D' ? 'minute' : 'day';
   };
 
   const chartData: ChartData<'candlestick'> = {
@@ -112,20 +111,25 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
       x: {
         type: 'time',
         time: {
-          unit: filter === '1D' ? 'minute' : 'day',
-          unitStepSize: filter === '1D' ? 5 : undefined, // Use unitStepSize for step size
+          unit: getTimeUnit(filter),
           tooltipFormat: filter === '1D' ? 'MMM d, yyyy HH:mm' : 'MMM d, yyyy',
           displayFormats: {
             minute: 'HH:mm',
+            hour: 'HH:mm',
             day: 'MMM d',
+            week: 'MMM d',
+            month: 'MMM yyyy',
+            quarter: 'MMM yyyy',
+            year: 'yyyy',
           },
+          minUnit: 'minute',
         },
         grid: {
           color: '#EDEDED',
         },
         ticks: {
           autoSkip: true,
-          maxTicksLimit: 10,
+          maxTicksLimit: filter === '1D' ? 12 : 10, // Adjusted limit for intraday
         },
       },
       y: {
