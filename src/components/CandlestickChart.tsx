@@ -201,13 +201,19 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
           1 Year
         </button>
       </div>
-      <div style={{ height: '500px', width: '100%' }}>
-        {filteredData.length > 0 ? (
-          <Chart type="candlestick" data={chartData} options={chartOptions} />
-        ) : (
-          <div>No data available</div>
-        )}
-      </div>
+
+      <div className="h-96 md:h-200px xl:h-[40rem] w-full"> {/* Adjust the height for different screen sizes */}
+  <div className="relative h-full w-full">
+    {filteredData.length > 0 ? (
+      <Chart type="candlestick" data={chartData} options={chartOptions} />
+    ) : (
+      <div>No data available</div>
+    )}
+  </div>
+</div>
+
+
+
     </div>
   );
 };
