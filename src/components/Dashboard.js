@@ -25,18 +25,18 @@ const Dashboard = () => {
       <div className="col-span-1 md:col-span-2 xl:col-span-3 row-span-1">
         <Card>Header</Card>
       </div>
-      <div className="md:col-span-2 xl:col-span-2 row-span-4 overflow-hidden">
+      <div className="md:col-span-2 xl:col-span-2 row-span-5 overflow-hidden">
         <Card>
           <CandlestickChart dailyData={dummyData} intradayData={dummyIntradayData} />
         </Card>
       </div>
-      <div className="md:col-span-1 xl:col-span-1 row-span-4 overflow-hidden">
+      <div className="md:col-span-1 xl:col-span-1 row-span-1">
+        <Card>Overview</Card>
+      </div>
+      <div className="md:col-span-1 xl:col-span-1 row-span-4 overflow-auto">
         <Card>
           <FinancialTable data={data} />
         </Card>
-      </div>
-      <div className="md:col-span-1 xl:col-span-3 row-span-1">
-        <Card>Overview</Card>
       </div>
     </div>
   );
