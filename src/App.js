@@ -8,7 +8,7 @@ import Candlestick from './components/CandlestickChart.tsx';
 
 const App = () => {
   const [data, setData] = useState(null);
-
+  const [darkMode, setDarkMode] = useState(false)
   useEffect(() => {
     const getData = async () => {
       const result = await fetchFinancialData();

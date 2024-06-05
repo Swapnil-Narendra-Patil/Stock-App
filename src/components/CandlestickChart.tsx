@@ -19,6 +19,7 @@ import { Chart } from 'react-chartjs-2';
 import { StockData } from '../data/dummyData';
 import { IntradayStockData } from '../data/dummyIntradayData';
 import { format } from 'date-fns';
+import ChartFilter from './ChartFilter';
 
 ChartJS.register(
   ...registerables,
@@ -93,12 +94,12 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
         borderColor: (context) => {
           const { dataset, dataIndex } = context;
           const value = dataset.data[dataIndex] as any;
-          return value?.c > value?.o ? '#00ff00' : '#ff0000';
+          return value?.c > value?.o ? 'rgb(0, 255, 0)' : 'rgb(255, 0, 0)'; // Fully opaque green and red colors
         },
         backgroundColor: (context) => {
           const { dataset, dataIndex } = context;
           const value = dataset.data[dataIndex] as any;
-          return value?.c > value?.o ? '#00ff00' : '#ff0000';
+          return value?.c > value?.o ? 'rgb(0, 255, 0)' : 'rgb(255, 0, 0)'; // Fully opaque green and red colors
         },
       },
     ],
@@ -131,6 +132,8 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
           autoSkip: true,
           maxTicksLimit: filter === '1D' ? 12 : 10, // Adjusted limit for intraday
         },
+        reverse: false, // Ensure x-axis is not reversed
+
       },
       y: {
         beginAtZero: false,
@@ -158,48 +161,14 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
   return (
     <div>
       <div className="mb-4 flex space-x-2">
-        <button
-          onClick={() => setFilter('1D')}
-          className={`px-2 py-1 rounded ${filter === '1D' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          1 Day
-        </button>
-        <button
-          onClick={() => setFilter('1W')}
-          className={`px-2 py-1 rounded ${filter === '1W' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          1 Week
-        </button>
-        <button
-          onClick={() => setFilter('1M')}
-          className={`px-2 py-1 rounded ${filter === '1M' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          1 Month
-        </button>
-        <button
-          onClick={() => setFilter('3M')}
-          className={`px-2 py-1 rounded ${filter === '3M' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          3 Months
-        </button>
-        <button
-          onClick={() => setFilter('5M')}
-          className={`px-2 py-1 rounded ${filter === '5M' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          5 Months
-        </button>
-        <button
-          onClick={() => setFilter('YTD')}
-          className={`px-2 py-1 rounded ${filter === 'YTD' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          YTD
-        </button>
-        <button
-          onClick={() => setFilter('1Y')}
-          className={`px-2 py-1 rounded ${filter === '1Y' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-        >
-          1 Year
-        </button>
+        {['1D', '1W', '1M', '3M', '5M', 'YTD', '1Y'].map((interval) => (
+          <ChartFilter
+            key={interval}
+            text={interval}
+            active={filter === interval}
+            onClick={() => setFilter(interval)}
+          />
+        ))}
       </div>
 
       <div style={{ height: '40rem', width: '100%' }}>
@@ -209,8 +178,6 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
           <div>No data available</div>
         )}
       </div>
-
-
     </div>
   );
 };

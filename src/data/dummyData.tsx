@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, subDays } from 'date-fns';
 
 export interface StockData {
   date: string;
@@ -9,9 +9,9 @@ export interface StockData {
   volume: number;
 }
 
-export const generateDummyData = (numPoints: number): StockData[] => {
+export const generateDummyData = (numPoints: number, endDate: Date): StockData[] => {
   const data: StockData[] = [];
-  let date = new Date();
+  let date = endDate;
   
   let open = 150;
   let close = open;
@@ -33,10 +33,11 @@ export const generateDummyData = (numPoints: number): StockData[] => {
       volume 
     });
 
-    date.setDate(date.getDate() - 1);
+    date = subDays(date, 1);
   }
 
   return data.reverse();
 };
 
-export const dummyData: StockData[] = generateDummyData(365);
+const endDate = new Date('2024-05-02');
+export const dummyData: StockData[] = generateDummyData(365, endDate);
