@@ -1,70 +1,89 @@
-# Getting Started with Create React App
+# Stock Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+The Stock Dashboard is a comprehensive tool designed for the everyday investor to monitor stock prices, perform equity research, and gain insights into market trends. The application provides detailed financial data, candlestick charts, and an overview of stock performance in a user-friendly interface.
 
-In the project directory, you can run:
+![Dashboard Screenshot](public/Image2.png)
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Equity Research**: Simplified news, sentiment analysis, and detailed financial data.
+- **Interactive Candlestick Charts**: Visual representation of daily and intraday stock data.
+- **Responsive Design**: Optimized for both desktop and mobile views.
+- **Dark Mode**: Seamlessly switch between light and dark themes.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![Dark Mode](public/Image1.png)
+- **Error Handling**: Robust error boundary components to ensure smooth user experience.
 
-### `npm test`
+## Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **React**: A JavaScript library for building user interfaces.
+- **TypeScript**: Superset of JavaScript that adds static types.
+- **Chart.js**: Simple yet flexible JavaScript charting for designers & developers.
+- **Tailwind CSS**: A utility-first CSS framework for rapidly building custom designs.
+- **Vercel**: Platform for frontend frameworks and static sites, optimized for speed.
 
-### `npm run build`
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Clone the repository**:
+    ```sh
+    git clone git@github.com:Swapnil-Narendra-Patil/Stock-App.git
+    cd stock-dashboard
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Install dependencies**:
+    ```sh
+    npm install
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Run the development server**:
+    ```sh
+    npm start
+    ```
 
-### `npm run eject`
+4. **Build for production**:
+    ```sh
+    npm run build
+    ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Usage
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **View Stock Details**: View the latest stock prices, changes, and percentage changes.
+- **Interactive Charts**: Analyze stock performance with interactive candlestick charts.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Components
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Dashboard**: The main component that renders the entire dashboard layout.
+- **Card**: A reusable card component for displaying various sections of the dashboard.
+- **FinancialTable**: Displays detailed financial data in a tabular format.
+- **CandlestickChart**: Renders daily and intraday candlestick charts.
+- **Header**: Displays the header with the company name.
+- **Overview**: Shows an overview of the stock's latest performance.
+- **ErrorBoundary**: Handles errors gracefully to ensure smooth user experience.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deployment
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The Stock Dashboard is deployed on Vercel. To deploy your own version:
 
-### Code Splitting
+1. **Install Vercel CLI**:
+    ```sh
+    npm install -g vercel
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+2. **Deploy**:
+    ```sh
+    vercel
+    ```
 
-### Analyzing the Bundle Size
+3. **Follow the prompts** to complete the deployment.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Contributing
 
-### Making a Progressive Web App
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License
 
-### Advanced Configuration
+This project is licensed under the MIT License.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
