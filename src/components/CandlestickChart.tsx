@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Chart as ChartJS,
   registerables,
@@ -20,6 +20,7 @@ import { StockData } from '../data/dummyData';
 import { IntradayStockData } from '../data/dummyIntradayData';
 import { format } from 'date-fns';
 import ChartFilter from './ChartFilter';
+import ThemeContext from "../context/ThemeContext";
 
 ChartJS.register(
   ...registerables,
@@ -38,6 +39,7 @@ interface CandlestickChartProps {
 }
 
 const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intradayData }) => {
+  const { darkMode } = useContext(ThemeContext);
   const [filteredData, setFilteredData] = useState<StockData[] | IntradayStockData[]>([]);
   const [filter, setFilter] = useState('1D'); // Default filter to 1 Day
 
@@ -126,19 +128,18 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
           minUnit: 'minute',
         },
         grid: {
-          color: '#EDEDED',
+          color: darkMode ? '#2D3748' : '#EDEDED', // Dark mode grid line color
         },
         ticks: {
           autoSkip: true,
           maxTicksLimit: filter === '1D' ? 12 : 10, // Adjusted limit for intraday
         },
         reverse: false, // Ensure x-axis is not reversed
-
       },
       y: {
         beginAtZero: false,
         grid: {
-          color: '#EDEDED',
+          color: darkMode ? '#2D3748' : '#EDEDED', // Dark mode grid line color
         },
       },
     },
