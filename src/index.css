@@ -2,3 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+.responsive-div {
+  padding-top: 30px;
+  height: 70vh; /* Default responsive height */
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .responsive-div {
+    height: 60vh; /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-div {
+    height: 50vh; /* Further adjust height for even smaller screens */
+  }
+}
