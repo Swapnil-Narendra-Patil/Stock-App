@@ -211,7 +211,6 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
       </div>
 
 
-
     </div>
   );
 };

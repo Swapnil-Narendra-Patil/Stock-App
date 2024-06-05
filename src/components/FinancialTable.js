@@ -41,7 +41,7 @@ const FinancialTable = ({ data }) => {
             <td className="px-1 py-1 border-b">Market Cap</td>
             <td className="px-1 py-1 border-b">{market_ap}</td>
           </tr>
-          <tr className="bg-gray-50">
+          <tr>
             <td className="px-1 py-1 border-b">Shares Outstanding</td>
             <td className="px-1 py-1 border-b">{shares_outstanding}</td>
           </tr>
