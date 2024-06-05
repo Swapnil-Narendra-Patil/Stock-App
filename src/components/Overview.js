@@ -20,7 +20,11 @@ const Overview = ({ symbol, price, change, changePercent, currency }) => {
           <span className={`${change > 0 ? "text-lime-500" : "text-red-500"}`}>
             {change}
           </span>
-          <span className="text-neutral-400 ml-1">({changePercent}%)</span>
+          <span
+            className={`ml-1 ${change > 0 ? "text-lime-500" : "text-red-500"}`}
+          >
+            ({changePercent}%)
+          </span>
         </div>
       </div>
     </Card>
