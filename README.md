@@ -24,9 +24,7 @@ The Stock Dashboard is a comprehensive tool designed for the everyday investor t
 - **Tailwind CSS**: A utility-first CSS framework for rapidly building custom designs.
 - **Vercel**: Platform for frontend frameworks and static sites, optimized for speed.
 
-visit [Vercel's official website](https://stock-app-theta-bice.vercel.app/).
-[Deployed Website](stock-app-theta-bice.vercel.app)
-
+visit [Deployed website](https://stock-app-theta-bice.vercel.app/).
 
 ## Installation
 
