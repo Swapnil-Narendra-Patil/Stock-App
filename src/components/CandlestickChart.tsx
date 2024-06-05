@@ -219,7 +219,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({
 
   return (
     <div>
-      <div className="mb-4 flex space-x-2">
+      <div className=" mb-4 flex space-x-2">
         {["1D", "1W", "1M", "3M", "5M", "YTD", "1Y"].map((interval) => (
           <ChartFilter
             key={interval}
@@ -233,7 +233,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({
         ))}
       </div>
 
-      <div style={{ height: "40rem", width: "100%" }}>
+      <div style={{ paddingTop: "30px", height: "36rem", width: "100%" }}>
         {filteredData.length > 0 ? (
           <Chart type="candlestick" data={chartData} options={chartOptions} />
         ) : (
