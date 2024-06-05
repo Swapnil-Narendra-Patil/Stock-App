@@ -10,6 +10,7 @@ import {
   ChartData,
   ChartOptions,
 } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-date-fns';
 import {
   CandlestickController,
@@ -20,10 +21,11 @@ import { StockData } from '../data/dummyData';
 import { IntradayStockData } from '../data/dummyIntradayData';
 import { format } from 'date-fns';
 import ChartFilter from './ChartFilter';
-import ThemeContext from "../context/ThemeContext";
+import ThemeContext from '../context/ThemeContext';
 
 ChartJS.register(
   ...registerables,
+  annotationPlugin,
   TimeScale,
   CandlestickController,
   CandlestickElement,
@@ -82,6 +84,9 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
     return filter === '1D' ? 'minute' : 'day';
   };
 
+  const latestDataPoint = filteredData.length > 0 ? filteredData[filteredData.length - 1] : null;
+  const isPriceIncreasing = latestDataPoint !== null && latestDataPoint.close > latestDataPoint.open;
+
   const chartData: ChartData<'candlestick'> = {
     datasets: [
       {
@@ -128,18 +133,21 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
           minUnit: 'minute',
         },
         grid: {
-          color: darkMode ? '#2D3748' : '#EDEDED', // Dark mode grid line color
+          color: darkMode ? '#555555' : '#EDEDED', // Change grid color based on dark mode
         },
         ticks: {
+          color: darkMode ? '	#C0C0C0' : '#000000', // Change tick color based on dark mode
           autoSkip: true,
           maxTicksLimit: filter === '1D' ? 12 : 10, // Adjusted limit for intraday
         },
-        reverse: false, // Ensure x-axis is not reversed
       },
       y: {
         beginAtZero: false,
         grid: {
-          color: darkMode ? '#2D3748' : '#EDEDED', // Dark mode grid line color
+          color: darkMode ? '#555555' : '#EDEDED', // Change grid color based on dark mode
+        },
+        ticks: {
+          color: darkMode ? '	#C0C0C0' : '#000000', // Change tick color based on dark mode
         },
       },
     },
@@ -154,6 +162,26 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ dailyData, intraday
             const date = format(new Date(dataPoint.x), filter === '1D' ? 'MMM d, yyyy HH:mm' : 'MMM d, yyyy');
             return `Date: ${date}\nOpen: ${dataPoint.o}\nHigh: ${dataPoint.h}\nLow: ${dataPoint.l}\nClose: ${dataPoint.c}`;
           },
+        },
+      },
+      annotation: {
+        annotations: {
+          latestPriceLine: latestDataPoint
+            ? {
+                type: 'line',
+                yMin: latestDataPoint.close,
+                yMax: latestDataPoint.close,
+                borderColor: isPriceIncreasing ? 'rgb(0, 255, 0)' : 'rgb(255, 0, 0)',
+                borderWidth: 1,
+                borderDash: [5, 5], // Make the line dotted
+                label: {
+                  content: latestDataPoint.close.toString(),
+                  position: 'end',
+                  backgroundColor: isPriceIncreasing ? 'rgb(0, 255, 0)' : 'rgb(255, 0, 0)',
+                  color: '#ffffff',
+                },
+              }
+            : undefined,
         },
       },
     },
