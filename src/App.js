@@ -5,6 +5,7 @@ import { dummyData } from './data/dummyData.tsx';
 import { fetchFinancialData } from './services/api.tsx';
 import Dashboard from './components/Dashboard.js';
 import Candlestick from './components/CandlestickChart.tsx';
+import ThemeContext from './context/ThemeContext.js';
 
 const App = () => {
   const [data, setData] = useState(null);
@@ -20,16 +21,11 @@ const App = () => {
 
   if (!data) return <div>Loading...</div>;
 
-  return (
+  return (<ThemeContext.Provider value = {{ darkMode, setDarkMode }}>
     <>
       <Dashboard />
-      {/* <div className="App p-6"> */}
-        {/* <h1 className="text-3xl font-bold mb-6">Apple Stock Overview</h1> */}
-        {/* <Candlestick data={dummyData} /> */}
-        {/* Uncomment this line if you want to use FinancialTable component */}
-        {/* <FinancialTable data={data} /> */}
-      {/* </div> */}
     </>
+    </ThemeContext.Provider>
   );
 };
 
