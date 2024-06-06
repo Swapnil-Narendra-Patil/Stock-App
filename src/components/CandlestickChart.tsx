@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   Chart as ChartJS,
   registerables,
@@ -88,26 +88,26 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({
     return filter === "1D" ? "minute" : "day";
   };
 
-  const getStepSize = (filter: string) => {
-    switch (filter) {
-      case "1D":
-        return 30; // 30 minutes
-      case "1W":
-        return 1; // 1 day
-      case "1M":
-        return 2; // 2 days
-      case "3M":
-        return 7; // 1 week
-      case "5M":
-        return 14; // 2 weeks
-      case "YTD":
-        return 30; // 1 month
-      case "1Y":
-        return 30; // 1 month
-      default:
-        return 1;
-    }
-  };
+  // const getStepSize = (filter: string) => {
+  //   switch (filter) {
+  //     case "1D":
+  //       return 30; // 30 minutes
+  //     case "1W":
+  //       return 1; // 1 day
+  //     case "1M":
+  //       return 2; // 2 days
+  //     case "3M":
+  //       return 7; // 1 week
+  //     case "5M":
+  //       return 14; // 2 weeks
+  //     case "YTD":
+  //       return 30; // 1 month
+  //     case "1Y":
+  //       return 30; // 1 month
+  //     default:
+  //       return 1;
+  //   }
+  // };
 
   const latestDataPoint =
     filteredData.length > 0 ? filteredData[filteredData.length - 1] : null;
