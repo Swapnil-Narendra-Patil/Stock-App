@@ -1,18 +1,15 @@
-// src/components/Dashboard.js
-
 import React, { useContext, useEffect, useState } from "react";
 import Card from "./Card";
 import FinancialTable from "./FinancialTable";
 import { fetchFinancialData } from "../services/api.tsx";
 import CandlestickChart from "./CandlestickChart.tsx";
-import Header from "./Header";
-import Overview from "./Overview";
+import Header from "./Header.js";
+import Overview from "./Overview.js";
 import ErrorBoundary from "./ErrorBoundry.tsx";
 import ThemeContext from "../context/ThemeContext";
-import { mockCompanyDetails } from "../constants/mock";
+import { mockCompanyDetails } from "../constants/mock.js";
 import { dummyData } from "../data/dummyData.tsx";
 import { dummyIntradayData } from "../data/dummyIntradayData.tsx";
-import News from "./News"; // Import the News component
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -37,7 +34,7 @@ const Dashboard = () => {
 
   return (
     <div
-      className={`h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 grid-rows-9 md:grid-rows-8 xl:grid-rows-7 auto-rows-fr gap-6 p-5 px-10 font-quicksand ${
+      className={`h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 grid-rows-8 md:grid-rows-7 xl:grid-rows-5 auto-rows-fr gap-6 p-5 px-10 font-quicksand ${
         darkMode ? "bg-gray-900 text-gray-300" : "bg-neutral-100"
       }`}
     >
@@ -71,9 +68,6 @@ const Dashboard = () => {
             <FinancialTable data={data} />
           </ErrorBoundary>
         </Card>
-      </div>
-      <div className="col-span-1 md:col-span-2 xl:col-span-3 row-span-2">
-        <News news={data.news} />
       </div>
     </div>
   );
