@@ -23,3 +23,8 @@ EXPOSE 5000
 
 # Define the command to run the application
 CMD ["python", "flask_financials.py"]
+
+# Build phase (Assuming you have a build step)
+WORKDIR /app
+RUN npm install
+RUN CI=false npm run build
