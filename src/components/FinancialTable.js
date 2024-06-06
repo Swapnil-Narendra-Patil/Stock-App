@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import ThemeContext from "../context/ThemeContext";
 
-const FinancialTable = ({ data }) => {
+const FinancialTable = () => {
   const { darkMode } = useContext(ThemeContext);
 
-  // Default data in case actual data is not fetched
-  const defaultData = {
+  // Default data to display in the table
+  const data = {
     analyst_estimates: {
       Citibank: 6.5,
       "Goldman Sachs": 7.9,
@@ -36,7 +36,6 @@ const FinancialTable = ({ data }) => {
     shares_outstanding: 317,
   };
 
-  // Use default data if actual data is not available
   const {
     analyst_estimates,
     current_ratio,
@@ -49,7 +48,7 @@ const FinancialTable = ({ data }) => {
     ps_ratio,
     shares_outstanding,
     news,
-  } = data || defaultData;
+  } = data;
 
   // Additional analysts and their estimates
   const additional_analysts = {
@@ -187,48 +186,42 @@ const FinancialTable = ({ data }) => {
         </tbody>
       </table>
 
-      {news && Object.keys(news).length > 0 && (
-        <>
-          <h2
-            className={`text-lg font-bold mt-4 mb-2 ${
-              darkMode ? "text-gray-100" : "text-black"
-            }`}
+      <h2
+        className={`text-lg font-bold mt-4 mb-2 ${
+          darkMode ? "text-gray-100" : "text-black"
+        }`}
+      >
+        News
+      </h2>
+      <div className="flex flex-wrap">
+        {Object.entries(news).map(([key, article], index) => (
+          <div
+            key={key}
+            className={`w-full md:w-1/2 xl:w-1/3 p-2 ${
+              index % 2 === 0
+                ? darkMode
+                  ? "bg-gray-700"
+                  : "bg-gray-50"
+                : darkMode
+                ? "bg-gray-800"
+                : "bg-white"
+            } border-2 rounded-md mb-4`}
           >
-            News
-          </h2>
-          <div className="flex flex-wrap">
-            {Object.entries(news).map(([key, article], index) => (
-              <div
-                key={key}
-                className={`w-full md:w-1/2 xl:w-1/3 p-2 ${
-                  index % 2 === 0
-                    ? darkMode
-                      ? "bg-gray-700"
-                      : "bg-gray-50"
-                    : darkMode
-                    ? "bg-gray-800"
-                    : "bg-white"
-                } border-2 rounded-md mb-4`}
-              >
-                <h3 className="text-md font-semibold">{`Article ${
-                  index + 1
-                }`}</h3>
-                <p className="text-sm">{article.summary}</p>
-                <p
-                  className={`text-sm ${
-                    article.sentiment.value === "positive"
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  Sentiment: {article.sentiment.value} (Score:{" "}
-                  {article.sentiment.score})
-                </p>
-              </div>
-            ))}
+            <h3 className="text-md font-semibold">{`Article ${index + 1}`}</h3>
+            <p className="text-sm">{article.summary}</p>
+            <p
+              className={`text-sm ${
+                article.sentiment.value === "positive"
+                  ? "text-green-500"
+                  : "text-red-500"
+              }`}
+            >
+              Sentiment: {article.sentiment.value} (Score:{" "}
+              {article.sentiment.score})
+            </p>
           </div>
-        </>
-      )}
+        ))}
+      </div>
     </div>
   );
 };
