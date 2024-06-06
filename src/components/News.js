@@ -12,7 +12,7 @@ const News = ({ news }) => {
   return (
     <Card>
       <div
-        className={`p-2 ${
+        className={`pt-2 pr-2 pl-2 pb-1 ${
           darkMode ? "bg-gray-900 text-gray-300" : "bg-white text-black"
         }`}
       >
@@ -23,37 +23,41 @@ const News = ({ news }) => {
         >
           News
         </h2>
-        {Object.entries(news).map(([key, article], index) => (
-          <div
-            key={key}
-            className={`mb-4 p-4 rounded-md border-2 ${
-              index % 2 === 0
-                ? `${
-                    darkMode
-                      ? "bg-gray-700 border-gray-600"
-                      : "bg-gray-50 border-gray-200"
-                  }`
-                : `${
-                    darkMode
-                      ? "bg-gray-800 border-gray-700"
-                      : "bg-white border-gray-300"
-                  }`
-            }`}
-          >
-            <h3 className="text-md font-semibold">{`Article ${index + 1}`}</h3>
-            <p className="text-sm">{article.summary}</p>
-            <p
-              className={`text-sm ${
-                article.sentiment.value === "positive"
-                  ? "text-green-500"
-                  : "text-red-500"
+        <div className="flex justify-between">
+          {Object.entries(news).map(([key, article], index) => (
+            <div
+              key={key}
+              className={`flex-1 mx-2 p-4 rounded-md border-2 ${
+                index % 2 === 0
+                  ? `${
+                      darkMode
+                        ? "bg-gray-700 border-gray-600"
+                        : "bg-gray-50 border-gray-200"
+                    }`
+                  : `${
+                      darkMode
+                        ? "bg-gray-800 border-gray-700"
+                        : "bg-white border-gray-300"
+                    }`
               }`}
             >
-              Sentiment: {article.sentiment.value} (Score:{" "}
-              {article.sentiment.score})
-            </p>
-          </div>
-        ))}
+              <h3 className="text-md font-semibold">{`Article ${
+                index + 1
+              }`}</h3>
+              <p className="text-sm">{article.summary}</p>
+              <p
+                className={`text-sm ${
+                  article.sentiment.value === "positive"
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                Sentiment: {article.sentiment.value} (Score:{" "}
+                {article.sentiment.score})
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </Card>
   );

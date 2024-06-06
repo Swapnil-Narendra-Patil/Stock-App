@@ -233,7 +233,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({
         ))}
       </div>
 
-      <div style={{ paddingTop: "30px", height: "34rem", width: "100%" }}>
+      <div style={{ height: "28rem", width: "100%" }}>
         {filteredData.length > 0 ? (
           <Chart type="candlestick" data={chartData} options={chartOptions} />
         ) : (
