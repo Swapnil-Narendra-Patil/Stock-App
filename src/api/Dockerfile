@@ -1,5 +1,4 @@
-# Use the official lightweight Python image.
-# https://hub.docker.com/_/python
+# Use the official lightweight Python image
 FROM python:3.8-slim
 
 # Set environment variables
@@ -23,8 +22,3 @@ EXPOSE 5000
 
 # Define the command to run the application
 CMD ["python", "flask_financials.py"]
-
-# Build phase (Assuming you have a build step)
-WORKDIR /app
-RUN npm install
-RUN CI=false npm run build
