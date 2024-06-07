@@ -1,0 +1,21 @@
+version: "1"
+services:
+  pre-requisite-service:
+    image: us-east1-docker.pkg.dev/stock-app-425700/stockapp/unlevered-flask-dummy-financials:latest
+    container_name: pre-requisite-service
+    ports:
+      - "8000:5000" # Flask service will be accessible on port 8000
+    restart: always
+
+  react-app:
+    build: .
+    container_name: react-app
+    depends_on:
+      - pre-requisite-service
+    ports:
+      - "80:80"
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - REACT_APP_PRE_REQUISITE_SERVICE_URL=http://pre-requisite-service:5000

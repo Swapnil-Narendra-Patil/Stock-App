@@ -1,40 +1,27 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { fetchFinancialData } from "../services/api.tsx"; // Adjust the import path if necessary
 import ThemeContext from "../context/ThemeContext";
 
 const FinancialTable = () => {
   const { darkMode } = useContext(ThemeContext);
+  const [data, setData] = useState(null);
 
-  // Default data to display in the table
-  const data = {
-    analyst_estimates: {
-      Citibank: 6.5,
-      "Goldman Sachs": 7.9,
-      "Morgan Stanley": 9.87,
-    },
-    current_ratio: 7.1,
-    debt_to_equity_ratio: 2.1,
-    eps: 1.7,
-    market_ap: 2.5,
-    news: {
-      article1: {
-        sentiment: { score: 0.9, value: "positive" },
-        summary: "This is Article1",
-      },
-      article2: {
-        sentiment: { score: 0.67, value: "negative" },
-        summary: "This is Article2",
-      },
-      article3: {
-        sentiment: { score: 0.559, value: "positive" },
-        summary: "This is Article3",
-      },
-    },
-    pb_ratio: 7.9,
-    pe_ratio: 1.2,
-    peg_ratio: 5.5,
-    ps_ratio: 33.5,
-    shares_outstanding: 317,
-  };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const financialData = await fetchFinancialData();
+        setData(financialData);
+      } catch (error) {
+        console.error("Error fetching financial data:", error);
+      }
+    };
+
+    getData();
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   const {
     analyst_estimates,
@@ -47,7 +34,7 @@ const FinancialTable = () => {
     peg_ratio,
     ps_ratio,
     shares_outstanding,
-    news,
+    news, // Add news data here
   } = data;
 
   // Additional analysts and their estimates
@@ -186,42 +173,48 @@ const FinancialTable = () => {
         </tbody>
       </table>
 
-      <h2
-        className={`text-lg font-bold mt-4 mb-2 ${
-          darkMode ? "text-gray-100" : "text-black"
-        }`}
-      >
-        News
-      </h2>
-      <div className="flex flex-wrap">
-        {Object.entries(news).map(([key, article], index) => (
-          <div
-            key={key}
-            className={`w-full md:w-1/2 xl:w-1/3 p-2 ${
-              index % 2 === 0
-                ? darkMode
-                  ? "bg-gray-700"
-                  : "bg-gray-50"
-                : darkMode
-                ? "bg-gray-800"
-                : "bg-white"
-            } border-2 rounded-md mb-4`}
+      {news && Object.keys(news).length > 0 && (
+        <>
+          <h2
+            className={`text-lg font-bold mt-4 mb-2 ${
+              darkMode ? "text-gray-100" : "text-black"
+            }`}
           >
-            <h3 className="text-md font-semibold">{`Article ${index + 1}`}</h3>
-            <p className="text-sm">{article.summary}</p>
-            <p
-              className={`text-sm ${
-                article.sentiment.value === "positive"
-                  ? "text-green-500"
-                  : "text-red-500"
-              }`}
-            >
-              Sentiment: {article.sentiment.value} (Score:{" "}
-              {article.sentiment.score})
-            </p>
+            News
+          </h2>
+          <div className="flex flex-wrap">
+            {Object.entries(news).map(([key, article], index) => (
+              <div
+                key={key}
+                className={`w-full md:w-1/2 xl:w-1/3 p-2 ${
+                  index % 2 === 0
+                    ? darkMode
+                      ? "bg-gray-700"
+                      : "bg-gray-50"
+                    : darkMode
+                    ? "bg-gray-800"
+                    : "bg-white"
+                } border-2 rounded-md mb-4`}
+              >
+                <h3 className="text-md font-semibold">{`Article ${
+                  index + 1
+                }`}</h3>
+                <p className="text-sm">{article.summary}</p>
+                <p
+                  className={`text-sm ${
+                    article.sentiment.value === "positive"
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  Sentiment: {article.sentiment.value} (Score:{" "}
+                  {article.sentiment.score})
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 };

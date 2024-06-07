@@ -17,7 +17,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     const getData = async () => {
+      console.log("Here!");
       const result = await fetchFinancialData();
+      console.log(result);
+
       setData(result);
     };
 
