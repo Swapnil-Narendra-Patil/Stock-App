@@ -1,6 +1,6 @@
 # Stock Dashboard
 
-## Disclaimer: The API for this website is hosted on a free public server so it might take few minutes to fetch data and load the site
+## Disclaimer: The API for this website is hosted on a free public server so it might take few minutes (Usually 2 minutes) to fetch data and load the site
 
 ## Overview
 
