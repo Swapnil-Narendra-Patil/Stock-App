@@ -1,5 +1,7 @@
 # Stock Dashboard
 
+## Disclaimer: The API for this website is hosted on a free public server so it might take few minutes to fetch data and load the site
+
 ## Overview
 
 The Stock Dashboard is a comprehensive tool designed for the everyday investor to monitor stock prices, perform equity research, and gain insights into market trends. The application provides detailed financial data, candlestick charts, and an overview of stock performance in a user-friendly interface.
